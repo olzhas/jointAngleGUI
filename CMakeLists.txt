@@ -1,39 +1,33 @@
-cmake_minimum_required(VERSION 2.8.4)
-project(jointAngles)
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+project(staubli_jointtrajectory)
 
-include(FindPkgConfig)
+find_package (Qt4)
+
+include (FindPkgConfig)
 if (PKG_CONFIG_FOUND)
-    pkg_check_modules(GAZEBO gazebo)
+  pkg_check_modules(GAZEBO gazebo)
+  pkg_check_modules(OGRE OGRE)
+  pkg_check_modules(OGRE-Terrain OGRE-Terrain)
 endif()
-
-include(FindBoost)
-find_package(Boost ${MIN_BOOST_VERSTION} REQUIRED system filesystem regex)
 
 find_package(Protobuf REQUIRED)
 
-include_directories(${GAZEBO_INCLUDE_DIRS})
-link_directories(${GAZEBO_LIBRARY_DIRS})
-
-find_package(Qt4 REQUIRED)
-
-
-include(${QT_USE_FILE})
+include (${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
 
+include_directories(SYSTEM ${GAZEBO_INCLUDE_DIRS} ${OGRE_INCLUDE_DIRS}
+  ${OGRE-Terrain_INCLUDE_DIRS})
 
-                                  
-# another list, this time it includes all header files that should be treated with moc
-set(  JOINTANGLE_MOC_HDRS
-      dialog.h 
-      sliderdoublespinbox.h
-)
+link_directories(${GAZEBO_LIBRARY_DIRS} ${OGRE_LIBRARY_DIRS}
+    ${OGRE-Terrain_LIBRARY_DIRS})
 
+QT4_WRAP_CPP(headers_MOC GUIStaubliKinematicWidget.hh sliderdoublespinbox.h)
 
-QT4_WRAP_CPP( JOINTANGLE_MOC_SRCS ${JOINTANGLE_MOC_HDRS} )
+add_library(gui_staubli_kinematic_widget SHARED ${headers_MOC}
+  GUIStaubliKinematicWidget.cc sliderdoublespinbox.cpp)
+target_link_libraries(gui_staubli_kinematic_widget ${GAZEBO_LIBRARIES}
+    ${OGRE_LIBRARIES}
+    ${OGRE-Terrain_LIBRARIES}
+    ${QT_LIBRARIES}
+    ${PROTOBUF_LIBRARIES})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-
-set(SOURCE_FILES main.cpp dialog.cpp sliderdoublespinbox.cpp)
-add_executable(jointAngles ${SOURCE_FILES} ${JOINTANGLE_MOC_SRCS})
-
-target_link_libraries(jointAngles ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES} ${PROTOBUF_LIBRARIES} ${QT_LIBRARIES} pthread)
