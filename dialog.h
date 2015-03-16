@@ -1,7 +1,10 @@
 #ifndef DIALOG_H
 #define DIALOG_G
 
+
+
 #include <QDialog>
+#include "commthread.h"
 
 class QLabel;
 class QSlider;
@@ -9,20 +12,20 @@ class QGroupBox;
 
 class Dialog : public QDialog 
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     Dialog();
+    virtual ~Dialog();
+    void setPublisher(gazebo::transport::PublisherPtr pub);
 
-  private:
+private:
 
     void createFormGroupBox();
 
-    enum {numJoints = 6};
-
-
-
-    QSlider *sliders[numJoints];
     QGroupBox *formGroupBox;
+    CommThread *commThread;
+
+signals:
 
 
 };

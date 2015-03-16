@@ -1,29 +1,34 @@
 #include <QApplication>
-#include <QPushButton>
 #include <iostream>
-
-#include <gazebo/gazebo.hh>
-#include <gazebo/transport/transport.hh>
-#include <gazebo/msgs/msgs.hh>
-#include <gazebo/math/gzmath.hh>
 
 #include "dialog.h"
 
 int main(int argc, char* argv[]) 
 {
-  QApplication app(argc, argv);
-  
-  Dialog dialog;
-  dialog.show();
+    QApplication app(argc, argv);
 
-  // Load gazebo
-  gazebo::setupClient(argc, argv);
 
-  // Create our node for communication
-  gazebo::transport::NodePtr node(new gazebo::transport::Node());
-  node->Init();
+    // Publish to a gazebo plugin
 
-  // Publish to a gazebo plugin
+    // Load gazebo
+    gazebo::setupClient(argc, argv);
 
-  return app.exec();
+    // Create our node for communication
+    gazebo::transport::NodePtr node(new gazebo::transport::Node());
+    node->Init();
+
+    // Publish to a Gazebo topic
+    gazebo::transport::PublisherPtr pub =
+            node->Advertise<gazebo::msgs::Pose>("~/pose_example");
+
+    // Wait for a subscriber to connect
+    pub->WaitForConnection();
+
+    Dialog dialog;
+    dialog.setPublisher(pub);
+    dialog.show();
+
+    int ret = app.exec();
+    gazebo::shutdown();
+    return ret;
 }

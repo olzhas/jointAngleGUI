@@ -2,17 +2,37 @@
 #define COMMTHREAD_H
 
 #include <QThread>
+#include <QMutex>
 
-class commThread : public QThread
+#include <gazebo/gazebo.hh>
+#include <gazebo/transport/transport.hh>
+#include <gazebo/msgs/msgs.hh>
+#include <gazebo/math/gzmath.hh>
+
+#include "sliderdoublespinbox.h"
+
+class CommThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit commThread(QObject *parent = 0);
+    explicit CommThread(QObject *parent = 0);
+    ~CommThread();
 
 signals:
 
 public slots:
 
+private:
+    void run();
+
+    gazebo::transport::PublisherPtr pub;
+    bool abort;
+    QMutex mutex;
+
+public:
+    enum {numJoints = 6};
+    SliderDoubleSpinBox *controlWidget[numJoints];
+    void setPublisher(gazebo::transport::PublisherPtr newPub);
 };
 
 #endif // COMMTHREAD_H
