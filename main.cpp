@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 
     // Publish to a Gazebo topic
     gazebo::transport::PublisherPtr pub =
-            node->Advertise<gazebo::msgs::Pose>("~/pose_example");
+            node->Advertise<gazebo::msgs::Pose>("~/staubli_joint_states");
 
     // Wait for a subscriber to connect
     pub->WaitForConnection();

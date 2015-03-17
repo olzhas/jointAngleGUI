@@ -18,7 +18,6 @@ CommThread::~CommThread()
 
 void CommThread::run()
 {
-
     forever {
         if(abort)
             return;
@@ -35,10 +34,10 @@ void CommThread::run()
                 controlWidget[5]->getValue());
 
         // Convert to a pose message
-        gazebo::msgs::Pose msg;
-        gazebo::msgs::Set(&msg, pose);
+        //gazebo::msgs::
+        //        gazebo::msgs::Set(&msg, pose);
 
-        pub->Publish(msg);
+        //pub->Publish(msg);
 //        std::cout << controlWidget[0]->getValue() << " " <<
 //            controlWidget[1]->getValue() << " " <<
 //            controlWidget[2]->getValue() << " " <<

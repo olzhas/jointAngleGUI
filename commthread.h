@@ -10,6 +10,7 @@
 #include <gazebo/math/gzmath.hh>
 
 #include "sliderdoublespinbox.h"
+#include "staubli_joint_states.pb.h"
 
 class CommThread : public QThread
 {
