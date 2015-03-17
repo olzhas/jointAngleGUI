@@ -15,6 +15,9 @@
 class CommThread : public QThread
 {
     Q_OBJECT
+
+    typedef const boost::shared_ptr<const staubli_joint_states_msgs::msgs::StaubliJointStates> StaubliJointStatesPtr;
+
 public:
     explicit CommThread(QObject *parent = 0);
     ~CommThread();

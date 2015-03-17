@@ -36,7 +36,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(SOURCE_FILES main.cpp dialog.cpp sliderdoublespinbox.cpp commthread.cpp)
 add_executable(jointAngles ${SOURCE_FILES} ${JOINTANGLE_MOC_SRCS})
 
-target_link_libraries(jointAngles
+target_link_libraries(jointAngles staubli_joint_states_msgs
     ${GAZEBO_LIBRARIES}
     ${Boost_LIBRARIES}
     ${PROTOBUF_LIBRARIES}

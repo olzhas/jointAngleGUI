@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "dialog.h"
+#include "staubli_joint_states.pb.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -19,7 +20,7 @@ int main(int argc, char* argv[])
 
     // Publish to a Gazebo topic
     gazebo::transport::PublisherPtr pub =
-            node->Advertise<gazebo::msgs::Pose>("~/staubli_joint_states");
+            node->Advertise<staubli_joint_states_msgs::msgs::StaubliJointStates>("~/staubli_joint_states");
 
     // Wait for a subscriber to connect
     pub->WaitForConnection();

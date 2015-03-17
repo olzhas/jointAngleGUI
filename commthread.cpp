@@ -1,5 +1,5 @@
 #include "commthread.h"
-
+#include "staubli_joint_states.pb.h"
 #include <iostream>
 
 CommThread::CommThread(QObject *parent) :
@@ -18,6 +18,8 @@ CommThread::~CommThread()
 
 void CommThread::run()
 {
+    abort = false;
+
     forever {
         if(abort)
             return;
@@ -25,26 +27,15 @@ void CommThread::run()
         QThread::msleep(15);
 
         // Generate a pose
+        staubli_joint_states_msgs::msgs::StaubliJointStates jointStatesMsg;
+        jointStatesMsg.set_joint1(controlWidget[0]->getValue());
+        jointStatesMsg.set_joint2(controlWidget[1]->getValue());
+        jointStatesMsg.set_joint3(controlWidget[2]->getValue());
+        jointStatesMsg.set_joint4(controlWidget[3]->getValue());
+        jointStatesMsg.set_joint5(controlWidget[4]->getValue());
+        jointStatesMsg.set_joint6(controlWidget[5]->getValue());
 
-        gazebo::math::Pose pose(controlWidget[0]->getValue(),
-                controlWidget[1]->getValue(),
-                controlWidget[2]->getValue(),
-                controlWidget[3]->getValue(),
-                controlWidget[4]->getValue(),
-                controlWidget[5]->getValue());
-
-        // Convert to a pose message
-        //gazebo::msgs::
-        //        gazebo::msgs::Set(&msg, pose);
-
-        //pub->Publish(msg);
-//        std::cout << controlWidget[0]->getValue() << " " <<
-//            controlWidget[1]->getValue() << " " <<
-//            controlWidget[2]->getValue() << " " <<
-//            controlWidget[3]->getValue() << " " <<
-//            controlWidget[4]->getValue() << " " <<
-//            controlWidget[5]->getValue() << std::endl;
-
+        pub->Publish(jointStatesMsg);
     }
 }
 
